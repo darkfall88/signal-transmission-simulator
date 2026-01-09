@@ -152,31 +152,38 @@ def create_channel_ui():
     return ui, controls
 
 def create_receiver_ui():
-    import ipywidgets as widgets
-
-    enable_adc_checkbox = widgets.Checkbox(
+    enable_adc = widgets.Checkbox(
         value=False,
         description="Snížit fs (ADC)"
     )
 
-    fs_rx_slider = widgets.FloatLogSlider(
+    fs_rx = widgets.FloatLogSlider(
         value=20_000,
-        base=10,
-        min=2,      # 100 Hz
-        max=5,      # 100 kHz
+        min=2,
+        max=5,
         step=0.1,
-        description="fs_rx [Hz]",
-        continuous_update=True
+        description="fs_rx [Hz]"
+    )
+
+    zoom_bits = widgets.IntSlider(
+        value=10,
+        min=1,
+        max=100,
+        step=1,
+        description="Zoom [bitů]"
     )
 
     ui = widgets.VBox([
-        enable_adc_checkbox,
-        fs_rx_slider
+        enable_adc,
+        fs_rx,
+        zoom_bits
     ])
 
     controls = {
-        "enable_adc": enable_adc_checkbox,
-        "fs_rx": fs_rx_slider
+        "enable_adc": enable_adc,
+        "fs_rx": fs_rx,
+        "zoom_bits": zoom_bits
     }
 
     return ui, controls
+
