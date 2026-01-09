@@ -30,10 +30,13 @@ def generate_binary_signal(Rb=10_000, frame_length=1000, seed=12345, samples_per
 def plot_binary_signal(bits, nrz, t, Rb):
     plt.figure(figsize=(12, 4))
     plt.step(t, nrz, where="post")
+    plt.color="#1f4aa8",
+    plt.linewidth=2.0,
     plt.ylim(-1.2, 1.2)
     plt.xlabel("Čas [s]")
     plt.ylabel("Amplituda")
-    plt.title(f"Telegrafní NRZ signál (Rb = {Rb/1e3:.1f} kb/s)")
+    plot_title = f"Telegrafní NRZ signál (Rb = {Rb / 1e3:.1f} kb/s)"
+    plt.title(plot_title)
     plt.grid(True)
     plt.tight_layout()
     plt.show()

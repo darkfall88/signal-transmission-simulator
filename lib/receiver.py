@@ -1,37 +1,37 @@
+# receiver/receiver.py
+
 import numpy as np
 
 
-def sample_and_detect_nrz(signal, fs, Rb, threshold=0.0):
-    """
-    Základní přijímač pro NRZ:
-    - vzorkování ve středu bitu
-    - prahová detekce
+def sample_and_detect_nrz(
+    signal,
+    fs_internal,
+    Rb,
+    fs_rx=None
+):
 
-    Parametry:
-    signal : vstupní signál po kanálu
-    fs     : vzorkovací frekvence signálu
-    Rb     : bitová rychlost
-    threshold : rozhodovací práh
+    # 1) ADC / převzorkování
+    if fs_rx is not None and fs_rx < fs_internal:
+        step_adc = max(int(fs_internal / fs_rx), 1)
+        signal_rx = signal[::step_adc]
+        fs_eff = fs_internal / step_adc
+    else:
+        signal_rx = signal
+        fs_eff = fs_internal
 
-    Vrací:
-    bits_rx : detekované bity (0/1)
-    samples : použité vzorky
-    """
+    # 2) Symbolové vzorkování (i při fs_eff < Rb)
+    samples_per_bit = fs_eff / Rb
+    step = max(int(samples_per_bit), 1)
 
-    samples_per_bit = int(fs / Rb)
-    if samples_per_bit < 1:
-        raise ValueError("fs musí být >= Rb")
-
-    # vzorkovací okamžiky – střed bitu
     sample_indices = np.arange(
-        samples_per_bit // 2,
-        len(signal),
-        samples_per_bit
+        step // 2,
+        len(signal_rx),
+        step
     )
 
-    samples = signal[sample_indices]
+    samples = signal_rx[sample_indices]
 
-    # prahová detekce
-    bits_rx = (samples > threshold).astype(int)
+    # 3) Detekce (práh = 0)
+    bits_rx = (samples > 0).astype(int)
 
-    return bits_rx, samples
+    return bits_rx, samples, signal_rx, fs_eff

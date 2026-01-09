@@ -152,34 +152,31 @@ def create_channel_ui():
     return ui, controls
 
 def create_receiver_ui():
-    """
-    UI pro přijímač (vzorkování + detekce).
-    """
-
     import ipywidgets as widgets
 
-    threshold_slider = widgets.FloatSlider(
-        value=0.0,
-        min=-1.0,
-        max=1.0,
-        step=0.05,
-        description="Práh",
+    enable_adc_checkbox = widgets.Checkbox(
+        value=False,
+        description="Snížit fs (ADC)"
+    )
+
+    fs_rx_slider = widgets.FloatLogSlider(
+        value=20_000,
+        base=10,
+        min=2,      # 100 Hz
+        max=5,      # 100 kHz
+        step=0.1,
+        description="fs_rx [Hz]",
         continuous_update=True
     )
 
-    show_samples_checkbox = widgets.Checkbox(
-        value=True,
-        description="Zobrazit vzorky"
-    )
-
     ui = widgets.VBox([
-        threshold_slider,
-        show_samples_checkbox
+        enable_adc_checkbox,
+        fs_rx_slider
     ])
 
     controls = {
-        "threshold": threshold_slider,
-        "show_samples": show_samples_checkbox
+        "enable_adc": enable_adc_checkbox,
+        "fs_rx": fs_rx_slider
     }
 
     return ui, controls
