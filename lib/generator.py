@@ -31,7 +31,7 @@ def plot_binary_signal(bits, nrz, t, Rb):
     plt.figure(figsize=(12, 4))
     plt.step(t, nrz, where="post")
     plt.color="#1f4aa8",
-    plt.linewidth=2.0,
+    plt.linewidth=2.5,
     plt.ylim(-1.2, 1.2)
     plt.xlabel("Čas [s]")
     plt.ylabel("Amplituda")
