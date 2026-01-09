@@ -150,3 +150,36 @@ def create_channel_ui():
     }
 
     return ui, controls
+
+def create_receiver_ui():
+    """
+    UI pro přijímač (vzorkování + detekce).
+    """
+
+    import ipywidgets as widgets
+
+    threshold_slider = widgets.FloatSlider(
+        value=0.0,
+        min=-1.0,
+        max=1.0,
+        step=0.05,
+        description="Práh",
+        continuous_update=True
+    )
+
+    show_samples_checkbox = widgets.Checkbox(
+        value=True,
+        description="Zobrazit vzorky"
+    )
+
+    ui = widgets.VBox([
+        threshold_slider,
+        show_samples_checkbox
+    ])
+
+    controls = {
+        "threshold": threshold_slider,
+        "show_samples": show_samples_checkbox
+    }
+
+    return ui, controls
